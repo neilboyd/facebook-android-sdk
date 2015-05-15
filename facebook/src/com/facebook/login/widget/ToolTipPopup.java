@@ -63,7 +63,6 @@ public class ToolTipPopup {
     
     private final String mText;
     private final WeakReference<View> mAnchorViewRef;
-    private final Context mContext;
     private PopupContentView mPopupContent;
     private PopupWindow mPopupWindow;
     private Style mStyle = Style.BLUE;
@@ -93,7 +92,6 @@ public class ToolTipPopup {
     public ToolTipPopup(String text, View anchor) {
         mText = text;
         mAnchorViewRef = new WeakReference<View>(anchor);
-        mContext = anchor.getContext();
     }
     
     /**
@@ -110,7 +108,8 @@ public class ToolTipPopup {
     public void show() {
         final View anchorView = mAnchorViewRef.get();
         if (anchorView != null) {
-            mPopupContent = new PopupContentView(mContext);
+            final Context context = anchorView.getContext();
+            mPopupContent = new PopupContentView(context);
             TextView body = (TextView) mPopupContent.findViewById(
                     R.id.com_facebook_tooltip_bubble_view_text_body);
             body.setText(mText);
@@ -132,7 +131,7 @@ public class ToolTipPopup {
                 mPopupContent.xOut.setImageResource(R.drawable.com_facebook_tooltip_black_xout);
             }
             
-            final Window window = ((Activity) mContext).getWindow();
+            final Window window = ((Activity) context).getWindow();
             final View decorView = window.getDecorView();
             final int decorWidth = decorView.getWidth();
             final int decorHeight = decorView.getHeight();
